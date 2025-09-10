@@ -102,45 +102,48 @@ function readCookie()
 function doRegister(){
 	
 	userId = 0;
-	firstName = "";
-	lastName = "";
+	//firstName = "";
+	//lastName = "";
 
-	let login = document.getElementById("registerName").value;
+	let firstName = document.getElementById("registerFirstName").value;
+    let lastName = document.getElementById("registerLastName").value;
+	let login = document.getElementById("registerLogin").value;
 	let password = document.getElementById("registerPassword").value;
 
 	document.getElementById("registerResult").innerHTML = "";
 
-	let tmp = {login:login,password:password};
-	let jsonPayload = JSON.stringify( tmp );
+	let tmp = {
+		firstName: firstName,
+		lastName: lastName, 
+		login: login,
+		password: password
+	};
+
+	let jsonPayload = JSON.stringify(tmp);
 
 	let url = urlBase + '/Register.' + extension;
 
 	let xhr = new XMLHttpRequest();
 	xhr.open("POST", url, true);
 	xhr.setRequestHeader("Content-type", "application/json; charset=UTF-8");
-	try{
+	
+	try {
 
 		xhr.onreadystatechange = function() 
 		{
 			if (this.readyState == 4 && this.status == 200) 
 			{
 				let jsonObject = JSON.parse( xhr.responseText );
-				userId = jsonObject.id;
-		
-				if( userId < 1 )
-				{		
+
+				if( jsonObject.error){
+
 					document.getElementById("registerResult").innerHTML = "Registration failed" + jsonObject.error;
 					return;
 				}
 
 				document.getElementById("registerResult").innerHTML = "Registration success";
-	
-				setTimeout( function() {
 
-					window.location.href = "Contacts.html";
-				}, 2000 );
-
-				window.location.href = "color.html";
+			//	window.location.href = "color.html";
 			}
 		};
 		xhr.send(jsonPayload);
