@@ -27,32 +27,11 @@ button {
   color: white;
   cursor: pointer;
 }
-/*
-form {
-    width: 20%;
-    margin-top: 10px;
-    padding: 5px;
-    background-color: gray;
-}*/
+
 label {
 
     color: black;
 }
-ul.center {
-
-  display: inline-block;
-}
-
-li {
-
-  text-align: center;
-}
-
-ol {
-
-  text-align: center;
-}
-
 
 /* The popup form - hidden by default */
 .form-popup {
@@ -105,4 +84,15 @@ ol {
 /* Add some hover effects to buttons */
 .form-container .btn:hover, .open-button:hover {
   opacity: 1;
+}
+
+#loginResult{
+    display: inline-block;
+    font-size: 0.8em;
+    width: 90%;
+    text-align: center;
+    margin-left: 5%;
+    margin-bottom: 2%;
+    font-family: 'Ubuntu', sans-serif;
+    color: #95060a;
 }
