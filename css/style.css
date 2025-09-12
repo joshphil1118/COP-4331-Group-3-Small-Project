@@ -1,7 +1,17 @@
+/* page title font and color set*/
 h1 {
-     color: blue;
-   }
+     color: silver;
+     font-family: 'Garamond', serif;
+     border-bottom: #95060a;
+}
+   
+/* sets form title color*/
+.titleForm{
+  color: black;
+  /*margin: 0px;*/
+}
 
+/* set background img */
 body {
   background-image: url("../images/LoginBG.jpg");
   background-repeat: no-repeat; /* Prevents the image from repeating */
@@ -13,6 +23,7 @@ body {
   margin-left: 8%;
 }
 
+/* base login/register button hue*/
 button {
 
     background-color: rgb(144, 232, 238);
@@ -22,12 +33,14 @@ button {
     border: 2px solid white;
 }
 
+/* add a color change when hovering over button*/
 .button1:hover {
   background-color: rgb(66, 167, 66);
   color: white;
   cursor: pointer;
 }
 
+/*base lavel color as black*/
 label {
 
     color: black;
@@ -36,17 +49,22 @@ label {
 /* The popup form - hidden by default */
 .form-popup {
   display: none;
+  position: relative;
+  top: 15px;
   max-width: 300px;
   overflow: auto;
   border: 3px solid #f1f1f1;
-  /*z-index: 9;*/
+  border-radius: 50px;
 }
 
 /* Add styles to the form container */
 .form-container {
   max-width: 300px;
-  padding: 10px;
-  background-color: white;
+  padding-left: 20px;
+  padding-right: 20px;
+  padding-bottom: 15px;
+  padding-top: 1px;
+  background-color: gray;
 }
 
 /* Full-width input fields */
@@ -66,7 +84,7 @@ label {
 
 /* Set a style for the submit/login button */
 .form-container .btn {
-  background-color: #04AA6D;
+  background-color: darkgreen;
   color: white;
   padding: 16px 20px;
   border: none;
@@ -86,6 +104,7 @@ label {
   opacity: 1;
 }
 
+/* adds in a line for login error*/
 #loginResult{
     display: inline-block;
     font-size: 0.8em;
