@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>  
+    <head>
+        <title>Contacts Manager</title>
+        <script type="text/javascript" src="js/code.js"></script>
+        <link rel="stylesheet" href="css/contacts.css" type="text/css">
+        <link href="https://fonts.googleapis.com/css?family=Ubuntu" rel="stylesheet">
+
+        <script type="text/javascript">
+            document.addEventListener('DOMContentLoaded', function()
+        {
+            readCookie();
+        }, false)
+        </script>
+
+    </head>
+    
+    <body>
+        <article>
+            <header class="main_header">
+                <h1>Contacts Manager</h1>
+                <div id="loggedInDiv">
+                    <!-- <span id="userName"></span><br /> -->
+                    <button type="button" id="logoutButton" class="buttons" onclick="doLogout();">Log Out</button>
+                </div>
+            </header>
+        </article>
+
+        
+
+    </body>
+</html>
