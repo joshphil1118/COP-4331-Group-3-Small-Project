@@ -5,8 +5,11 @@ let userId = 0;
 let firstName = "";
 let lastName = "";
 
-function doLogin()
+function doLogin(event)
 {
+
+	if(event) event.preventDefault();
+
 	userId = 0;
 	firstName = "";
 	lastName = "";
@@ -46,7 +49,7 @@ function doLogin()
 
 				saveCookie();
 	
-				window.location.href = "color.html";
+				window.location.href = "contacts.html";
 			}
 		};
 		xhr.send(jsonPayload);
@@ -99,11 +102,11 @@ function readCookie()
 	}
 }
 
-function doRegister(){
+function doRegister(event){
 	
+	if(event) event.preventDefault();
+
 	userId = 0;
-	//firstName = "";
-	//lastName = "";
 
 	let firstName = document.getElementById("registerFirstName").value;
     let lastName = document.getElementById("registerLastName").value;
@@ -137,13 +140,32 @@ function doRegister(){
 
 				if( jsonObject.error){
 
-					document.getElementById("registerResult").innerHTML = "Registration failed" + jsonObject.error;
+					document.getElementById("registerResult").innerHTML = "Registration failed: " + jsonObject.error;
 					return;
 				}
 
-				document.getElementById("registerResult").innerHTML = "Registration success";
+				userId = jsonObject.id;
+				firstName = jsonObject.firstName;
+				lastName = jsonObject.lastName;
 
-			//	window.location.href = "color.html";
+				if(userId > 0 ) {
+
+					saveCookie();
+
+					document.getElementById("registerResult").innerHTML = "Registration success: Login you in";
+
+					//redirect to login page after a delay
+              		setTimeout(function() {
+                    	window.location.href = "contacts.html";
+                	}, 2000);
+
+				}
+
+				else {
+
+					document.getElementById("registerResult").innerHTML = "Registration failed: " + jsonObject.error;
+				}
+
 			}
 		};
 		xhr.send(jsonPayload);
@@ -163,15 +185,43 @@ function doLogout()
 	window.location.href = "index.html";
 }
 
-function addColor()
-{
-	let newColor = document.getElementById("colorText").value;
-	document.getElementById("colorAddResult").innerHTML = "";
+function changeTab(event, tabName) {
+  // Get all elements with class="tabcontent" and hide them
+  const tabs = document.querySelectorAll(".tabContent");
+  tabs.forEach(element => {
+    element.style.display = "none";
+  });
 
-	let tmp = {color:newColor,userId,userId};
+  // // Get all elements with class="tablinks" and remove the class "active"
+  const tablinks = document.querySelectorAll(".tablinks");
+  tablinks.forEach(element => {
+    element.className = element.className.replace(" activeTab", "");
+  });
+
+  // // Show the current tab, and add an "activeTab" class to the button that opened the tab
+  document.getElementById(tabName).style.display = "block";
+  event.currentTarget.className += " activeTab";
+} 
+
+function addContact()
+{
+	let newFirstName = document.getElementById("firstName").value;
+	let newLastName = document.getElementById("lastName").value;
+	let newPhoneNumber = document.getElementById("phoneNumber").value;
+	let newEmail = document.getElementById("email").value;
+	document.getElementById("contactAddResult").innerHTML = "";
+
+	let tmp = {
+		firstName:newFirstName,
+		lastName:newLastName,
+		phone:newPhoneNumber,
+		email:newEmail,
+		userId:userId
+	};
+
 	let jsonPayload = JSON.stringify( tmp );
 
-	let url = urlBase + '/AddColor.' + extension;
+	let url = urlBase + '/AddContact.' + extension;
 	
 	let xhr = new XMLHttpRequest();
 	xhr.open("POST", url, true);
@@ -182,29 +232,37 @@ function addColor()
 		{
 			if (this.readyState == 4 && this.status == 200) 
 			{
-				document.getElementById("colorAddResult").innerHTML = "Color has been added";
+				document.getElementById("contactAddResult").innerHTML = "Contact has been added";
 			}
 		};
 		xhr.send(jsonPayload);
 	}
 	catch(err)
 	{
-		document.getElementById("colorAddResult").innerHTML = err.message;
+		document.getElementById("contactAddResult").innerHTML = err.message;
 	}
 	
 }
 
-function searchColor()
+function searchContact()
 {
 	let srch = document.getElementById("searchText").value;
-	document.getElementById("colorSearchResult").innerHTML = "";
-	
-	let colorList = "";
+	// const name = content.value.toUpperCase().split(' ');
+	// firstName = name[0]
+	// lastName = name[name.length-1]
 
-	let tmp = {search:srch,userId:userId};
+	document.getElementById("contactSearchResult").innerHTML = "";
+	
+	let contactsList = ""
+
+	let tmp = {
+		search:srch,
+		userId:userId
+	};
+
 	let jsonPayload = JSON.stringify( tmp );
 
-	let url = urlBase + '/SearchColors.' + extension;
+	let url = urlBase + '/SearchContact.' + extension;
 	
 	let xhr = new XMLHttpRequest();
 	xhr.open("POST", url, true);
@@ -213,28 +271,34 @@ function searchColor()
 	{
 		xhr.onreadystatechange = function() 
 		{
+			document.getElementById("contactsFields").innerHTML = "";
 			if (this.readyState == 4 && this.status == 200) 
 			{
-				document.getElementById("colorSearchResult").innerHTML = "Color(s) has been retrieved";
+				// document.getElementById("contactSearchResult").innerHTML = "Contact(s) has been retrieved";
 				let jsonObject = JSON.parse( xhr.responseText );
-				
+				if (jsonObject.error) {
+                    console.log(jsonObject.error);
+                    return;
+                }
 				for( let i=0; i<jsonObject.results.length; i++ )
 				{
-					colorList += jsonObject.results[i];
-					if( i < jsonObject.results.length - 1 )
-					{
-						colorList += "<br />\r\n";
-					}
+					jsonResults = jsonObject.results[i];
+					contactsList += "<tr>"
+					contactsList += "<td>" + jsonObject.results[i].FirstName + "</td>";
+					contactsList += "<td>" + jsonObject.results[i].LastName + "</td>";
+					contactsList += "<td>" + jsonObject.results[i].Phone + "</td>";
+					contactsList += "<td>" + jsonObject.results[i].Email + "</td>";
+					contactsList += "</tr>"
 				}
 				
-				document.getElementsByTagName("p")[0].innerHTML = colorList;
+				document.getElementById("contactsFields").innerHTML = contactsList;
 			}
 		};
 		xhr.send(jsonPayload);
 	}
 	catch(err)
 	{
-		document.getElementById("colorSearchResult").innerHTML = err.message;
+		document.getElementById("contactSearchResult").innerHTML = err.message;
 	}
 	
 }
