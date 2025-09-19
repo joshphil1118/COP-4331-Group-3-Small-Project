@@ -9,3 +9,4 @@ This repository contains the source code and documentation for the COP 4331 Grou
 - Caleb Elliott
 - Joshua Phillips
 - Adam Brandt
+- Eli Suansing

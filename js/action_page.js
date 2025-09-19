@@ -1,8 +1,26 @@
 // const urlBase = 'http://138.197.74.112/js';
 
+setInterval( myTimer, 5000);
+let count = 0;
+
+function myTimer() {
+
+  if( count === 0 ){
+
+    document.getElementById("work").style.display = "inline";
+    document.getElementById("vacation").style.display = "none";
+    count++;
+  }
+  else {
+
+    document.getElementById("work").style.display = "none";
+    document.getElementById("vacation").style.display = "inline";
+    count--;
+  }
+}
+
 function openForm() {
   document.getElementById("login").style.display = "block";
-
 }
 
 function openForm2() {
