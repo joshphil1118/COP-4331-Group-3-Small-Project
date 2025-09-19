@@ -288,6 +288,7 @@ function searchContact()
 					contactsList += "<td>" + jsonObject.results[i].LastName + "</td>";
 					contactsList += "<td>" + jsonObject.results[i].Phone + "</td>";
 					contactsList += "<td>" + jsonObject.results[i].Email + "</td>";
+
 					contactsList += "</tr>"
 				}
 				
