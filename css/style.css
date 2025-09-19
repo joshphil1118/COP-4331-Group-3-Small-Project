@@ -1,63 +1,96 @@
 /* page title font and color set*/
 h1 {
-     color: silver;
-     font-family: 'Garamond', serif;
-     border-bottom: #95060a;
+  color: black;
+  border: gray;
+
+}
+
+.intro {
+
+  border-radius: 10px;
+  border-bottom: 2px solid white;
+  max-width: fit-content;
+  margin: auto;
+
+}
+
+.switch1 {
+
+  display: none;
+}
+
+.switch2 {
+  display: inline;
+}
+
+.hid {
+
+  font-size: 1px;
 }
    
 /* sets form title color*/
 .titleForm{
   color: black;
-  /*margin: 0px;*/
+  margin: 3px;
 }
 
-/* set background img */
+/* set background imgs */
 body {
-  background-image: url("../images/LoginBG.jpg");
-  background-repeat: no-repeat; /* Prevents the image from repeating */
-  background-size: cover; /* Resizes the image to cover the entire container */
-  background-position: center; /* centers background */
-  background-attachment: fixed; /* Keeps the background fixed when scrolling */
 
   text-align: left;
-  margin-left: 8%;
+  font-family: 'Garamond', serif; 
+
+  background-image: url("../images/LoginBG.png"), url("../images/Vaca.png"), url("../images/Work.jpeg"),
+  linear-gradient(to right, rgb(30 75 115 / 100%), rgb(58, 167, 112));
+  background-repeat: no-repeat; /* Prevents the image from repeating */
+  background-size: 23%, 50%, 51%, 100%;  /*Resizes the image to cover the entire container */
+  background-position: right center, right center, left center, right; /* centers background */
+  background-attachment: fixed; /* Keeps the background fixed when scrolling */
+
 }
 
 /* base login/register button hue*/
 button {
+  background-color: black;
+  color: white;
+  font-size: 25px;
+  border-radius: 35%; /*rounds the edges of border*/
+  border: 5px solid black;
+  margin-right: 20px;
+}
 
-    background-color: rgb(144, 232, 238);
-    color: black;
-    font-size: 20px;
-    border-radius: 35%;
-    border: 2px solid white;
+/* set the login/register buttons to the center*/
+.button_Position {
+  margin-left: 580px;
+  padding: 5px;
 }
 
 /* add a color change when hovering over button*/
 .button1:hover {
-  background-color: rgb(66, 167, 66);
+  background-color: gray;
   color: white;
   cursor: pointer;
 }
 
 /*base lavel color as black*/
 label {
-
-    color: black;
+  color: black;
 }
 
 /* The popup form - hidden by default */
 .form-popup {
   display: none;
   position: relative;
-  top: 15px;
+  top: 30px;
+  left: 525px;
   max-width: 300px;
   overflow: auto;
   border: 3px solid #f1f1f1;
   border-radius: 50px;
+
 }
 
-/* Add styles to the form container */
+/* Add styles to the form container by adding padding */
 .form-container {
   max-width: 300px;
   padding-left: 20px;
