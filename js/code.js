@@ -5,8 +5,11 @@ let userId = 0;
 let firstName = "";
 let lastName = "";
 
-function doLogin()
+function doLogin(event)
 {
+
+	if(event) event.preventDefault();
+
 	userId = 0;
 	firstName = "";
 	lastName = "";
@@ -99,11 +102,11 @@ function readCookie()
 	}
 }
 
-function doRegister(){
+function doRegister(event){
 	
+	if(event) event.preventDefault();
+
 	userId = 0;
-	//firstName = "";
-	//lastName = "";
 
 	let firstName = document.getElementById("registerFirstName").value;
     let lastName = document.getElementById("registerLastName").value;
@@ -137,13 +140,32 @@ function doRegister(){
 
 				if( jsonObject.error){
 
-					document.getElementById("registerResult").innerHTML = "Registration failed" + jsonObject.error;
+					document.getElementById("registerResult").innerHTML = "Registration failed: " + jsonObject.error;
 					return;
 				}
 
-				document.getElementById("registerResult").innerHTML = "Registration success";
+				userId = jsonObject.id;
+				firstName = jsonObject.firstName;
+				lastName = jsonObject.lastName;
 
-			//	window.location.href = "color.html";
+				if(userId > 0 ) {
+
+					saveCookie();
+
+					document.getElementById("registerResult").innerHTML = "Registration success: Login you in";
+
+					//redirect to login page after a delay
+              		setTimeout(function() {
+                    	window.location.href = "contacts.html";
+                	}, 2000);
+
+				}
+
+				else {
+
+					document.getElementById("registerResult").innerHTML = "Registration failed: " + jsonObject.error;
+				}
+
 			}
 		};
 		xhr.send(jsonPayload);
@@ -264,8 +286,9 @@ function searchContact()
 					contactsList += "<tr>"
 					contactsList += "<td>" + jsonObject.results[i].FirstName + "</td>";
 					contactsList += "<td>" + jsonObject.results[i].LastName + "</td>";
-					contactsList += "<td>" + jsonObject.results[i].PhoneNumber + "</td>";
-					contactsList += "<td>" + jsonObject.results[i].EmailAddress + "</td>";
+					contactsList += "<td>" + jsonObject.results[i].Phone + "</td>";
+					contactsList += "<td>" + jsonObject.results[i].Email + "</td>";
+
 					contactsList += "</tr>"
 				}
 				

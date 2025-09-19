@@ -1,4 +1,3 @@
-// const urlBase = 'http://138.197.74.112/js';
 
 setInterval( myTimer, 5000);
 let count = 0;
