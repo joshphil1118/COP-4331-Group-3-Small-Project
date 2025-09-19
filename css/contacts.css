@@ -1,25 +1,61 @@
+:root {
+      --secondary-color: rgb(30, 60, 60);
+      --background-color: rgb(60, 120, 120);
+}
+
 body {
-    background-color: rgb(39, 39, 39);
+    background-color: var(--background-color);
+    width: 90%;
+    max-width: 1280px;
+    margin: auto;
+}
+
+article {
+    margin: 12px auto;
 }
 
 .main_header {
-    background-color: rgb(24, 24, 24);
+    background-color: var(--secondary-color);
     height: 54px;
     padding: 16px 24px;
     border-radius: 36px;
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin: 15px, 10px;
 }
 
 #logoutButton {
+    width: 100px;
+    height: 50px;
+    font-size: large;
+    font-weight: bold;
+}
+
+.container {
+    margin: 0 auto;
+}
+
+
+.buttons {
     border-color: white;
     border-width: 4px;
     border-radius: 24px;
     background: none;
     color: white;
-    width: 100px;
+}
+
+button:hover {
+    border-color: rgb(50, 150, 100);
+}
+
+
+.centerDiv {
+    display: block;
+    margin: 0, auto;
+}
+
+#modeButton {
+    width: 200px;
     height: 50px;
     font-size: large;
     font-weight: bold;
