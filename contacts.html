@@ -3,8 +3,10 @@
     <head>
         <title>Contacts Manager</title>
         <script type="text/javascript" src="js/code.js"></script>
+        <script src="https://kit.fontawesome.com/f0bc1954d5.js" crossorigin="anonymous"></script>
         <link rel="stylesheet" href="css/contacts.css" type="text/css">
         <link href="https://fonts.googleapis.com/css?family=Ubuntu" rel="stylesheet">
+        <meta charset="UTF-8">
 
         <script type="text/javascript">
             document.addEventListener('DOMContentLoaded', function()
@@ -15,7 +17,7 @@
 
     </head>
     
-    <body>
+    <body onload="searchContact()">
         <article>
             <header class="main_header">
                 <h1>Contacts Manager</h1>
@@ -29,18 +31,19 @@
         <div class="container">
 
             <div class="tab">
-                <button type="button" class="tablinks" onclick="changeTab(event, 'contactsDiv');">Contacts</button>
+                <button type="button" class="tablinks" onclick="changeTab(event, 'contactsDiv');searchContact();">Contacts</button>
                 <button type="button" class="tablinks" onclick="changeTab(event, 'addDiv');">Add Contacts</button>
             </div>
 
             <div id="contactsDiv" class="tabContent" style="display: block">
-                <input type="text" id="searchText" placeholder="FirstName LastName" onkeyup="searchContact()">
+                <input type="text" id="searchText" placeholder="First Name Last Name" value="" onkeyup="searchContact()">
                 <button type="button" id="searchButton" class="buttons" onclick="searchContact();">Search</button>
 
                 <span id="contactSearchResult"></span>
                 <table id="contactsTable">
                     <thead>
                         <tr>
+                            <th>Actions</th>
                             <th>First Name</th>
                             <th>Last Name</th>
                             <th>Phone Number</th>
@@ -53,12 +56,14 @@
             </div>
 
             <div id="addDiv" class="tabContent" style="display: none">
-                <input type="text" id="firstName" placeholder="First Name">
-                <input type="text" id="lastName" placeholder="Last Name">
-                <input type="text" id="phoneNumber" placeholder="(XXX) XXX-XXXX">
-                <input type="text" id="email" placeholder="johndoe@example.com">
-                <button type="button" id="addContactButton" class="buttons" onclick="addContact();">Add Contact</button>
-                <span id="contactAddResult"></span>
+                <form id="add-contact-form" accept-charset="utf-8" onsubmit="addContact();return false;">
+                    <input type="text" class="register_field" id="firstName" placeholder="First Name" required> 
+                    <input type="text" class="register_field" id="lastName" placeholder="Last Name" required>
+                    <input type="tel" class="register_field phone_field" id="phone" placeholder="(XXX) XXX-XXXX" maxlength="16" required>
+                    <input type="text" class="register_field" id="email" onkeyup="validEmail()" placeholder="johndoe@example.com" required>
+                    <button type="submit" id="addContactButton" class="buttons">Add Contact</button>
+                    <span id="contactAddResult"></span>
+                </form>
             </div>
 
 
@@ -67,4 +72,5 @@
         
 
     </body>
+
 </html>
