@@ -1,5 +1,6 @@
 const urlBase = 'http://cop433103.com/LAMPAPI';
 const extension = 'php';
+const root = document.documentElement;
 
 let userId = 0;
 let firstName = "";
@@ -207,9 +208,14 @@ function addContact()
 {
 	let newFirstName = document.getElementById("firstName").value;
 	let newLastName = document.getElementById("lastName").value;
-	let newPhoneNumber = document.getElementById("phoneNumber").value;
+	let newPhoneNumber = document.getElementById("phone").value;
 	let newEmail = document.getElementById("email").value;
 	document.getElementById("contactAddResult").innerHTML = "";
+
+	if(!validEmail()) {
+		document.getElementById("contactAddResult").innerHTML = "Email Fix";
+		return;
+	}
 
 	let tmp = {
 		firstName:newFirstName,
@@ -283,11 +289,28 @@ function searchContact()
 				for( let i=0; i<jsonObject.results.length; i++ )
 				{
 					jsonResults = jsonObject.results[i];
-					contactsList += "<tr>"
-					contactsList += "<td>" + jsonObject.results[i].FirstName + "</td>";
-					contactsList += "<td>" + jsonObject.results[i].LastName + "</td>";
-					contactsList += "<td>" + jsonObject.results[i].Phone + "</td>";
-					contactsList += "<td>" + jsonObject.results[i].Email + "</td>";
+					contactsList += "<tr id=\"entry" + i + "\">";
+
+					contactsList +=	"<td id=\"entryButtons" + i + "\">"
+					contactsList += "<button id=\"entryDelete\"" + i + " type=\"button\" class=\"edit_buttons\" onclick=\"deleteContact(" + i + ");\"><i class=\"fa-solid fa-user-minus\"></i></button>";
+					contactsList += "<button type=\"button\" id=\"entryEdit\"" + i + " class=\"edit_buttons\" onclick=\"startEditContact(" + i + ");\"><i class=\"fa-solid fa-user-gear\"></i></button></td>";
+
+					contactsList += "<td id=\"editButtons" + i + "\" style=\"display: none\">"
+					contactsList += "<button type=\"button\" id=\"entryAccept\"" + i + " class=\"edit_buttons\" onclick=\"acceptEditContact(" + i + ");\"><i class=\"fa-solid fa-check\"></i></button>";
+					contactsList += "<button type=\"button\" id=\"entryCancel\"" + i + " class=\"edit_buttons\" onclick=\"cancelEditContact(" + i + ");\"><i class=\"fa-solid fa-x\"></i></button></td>";
+
+
+					contactsList += "<td>" + "<span id=\"entryFirstName" + i + "\">" + jsonObject.results[i].FirstName + "</span>";
+					contactsList += "<input + id=\"entryFirstNameEdit" + i + "\" type=\"text\" style=\"display: none\" class=\"entry_edit_fields\" placeholder=\"First Name\">" + "</td>";
+
+					contactsList += "<td>" + "<span id=\"entryLastName" + i + "\">" + jsonObject.results[i].LastName + "</span>";
+					contactsList += "<input id=\"entryLastNameEdit" + i + "\" type=\"text\" style=\"display: none\" class=\"entry_edit_fields\" placeholder=\"Last Name\">" + "</td>";
+
+					contactsList += "<td>" + "<span id=\"entryPhone" + i + "\">" + jsonObject.results[i].Phone + "</span>";
+					contactsList += "<input id=\"entryPhoneEdit" + i + "\" type=\"text\" style=\"display: none\" class=\"entry_edit_fields phone_field\" placeholder=\"Phone Name\" onkeydown=\"disallowNonNumericInput\" onkeyup=\"tableFortmatToPhone(" + i + ");\">" + "</td>";
+
+					contactsList += "<td>" + "<span id=\"entryEmail" + i + "\">" + jsonObject.results[i].Email + "</span>";
+					contactsList += "<input id=\"entryEmailEdit" + i + "\" type=\"text\" style=\"display: none\" class=\"entry_edit_fields\" placeholder=\"Email Name\">" + "</td>";
 
 					contactsList += "</tr>"
 				}
@@ -303,3 +326,228 @@ function searchContact()
 	}
 	
 }
+
+function deleteContact(i) {
+	let firstName = document.getElementById("entryFirstName" + i).innerText
+	let lastName = document.getElementById("entryLastName" + i).innerText
+
+	let tmp = {
+		firstName:firstName,
+		lastName:lastName,
+		userId:userId
+	};
+
+	let jsonPayload = JSON.stringify( tmp );
+
+	let url = urlBase + '/DeleteContact.' + extension;
+	
+	let xhr = new XMLHttpRequest();
+	xhr.open("POST", url, true);
+	xhr.setRequestHeader("Content-type", "application/json; charset=UTF-8");
+	try
+	{
+		xhr.onreadystatechange = function() 
+		{
+			if (this.readyState == 4 && this.status == 200) 
+			{
+				// document.getElementById("contactEditResult").innerHTML = "Contact has been added";
+				console.log("Contact Deleted")
+			}
+		};
+		xhr.send(jsonPayload);
+	}
+	catch(err)
+	{
+		// document.getElementById("contactEditResult").innerHTML = err.message;
+		console.log(err.message)
+	}
+
+	document.getElementById("entry" + i).remove();
+}
+
+function startEditContact(i) {
+	document.getElementById("entryButtons" + i).style.display = "none";
+	document.getElementById("editButtons" + i).style.display = "block";
+
+	let fields = ["entryFirstName", "entryLastName", "entryEmail", "entryPhone"];
+
+	fields.forEach(function(field) {
+		fieldContent = document.getElementById(field + i).innerText;
+
+		document.getElementById(field + "Edit" + i).value = fieldContent;
+
+		document.getElementById(field + i).style.display = "none";
+		document.getElementById(field + "Edit" + i).style.display = "block";
+	});
+	
+}
+
+function cancelEditContact(i) {
+	document.getElementById("entryButtons" + i).style.display = "block";
+	document.getElementById("editButtons" + i).style.display = "none";
+
+	let fields = ["entryFirstName", "entryLastName", "entryEmail", "entryPhone"];
+	fields.forEach(function(field) {
+		document.getElementById(field + i).style.display = "block";
+		document.getElementById(field + "Edit" + i).style.display = "none";
+	});
+}
+
+function acceptEditContact(i) {
+	let newFirstName = document.getElementById("entryFirstName" + "Edit" + i).value;
+	let newLastName = document.getElementById("entryLastName" + "Edit" + i).value;
+	let newPhone = document.getElementById("entryPhone" + "Edit" + i).value;
+	let newEmail = document.getElementById("entryEmail" + "Edit" + i).value;
+
+	let originalFirstName = document.getElementById("entryFirstName" + i).innerText;
+	let originalLastName = document.getElementById("entryLastName" + i).innerText;
+
+	let tmp = {
+		firstName:originalFirstName,
+		lastName:originalLastName,
+		newFirstName:newFirstName,
+		newLastName:newLastName,
+		phone:newPhone,
+		email:newEmail,
+		userId:userId
+	};
+
+	let jsonPayload = JSON.stringify( tmp );
+
+	let url = urlBase + '/EditContact.' + extension;
+	
+	let xhr = new XMLHttpRequest();
+	xhr.open("POST", url, true);
+	xhr.setRequestHeader("Content-type", "application/json; charset=UTF-8");
+	try
+	{
+		xhr.onreadystatechange = function() 
+		{
+			if (this.readyState == 4 && this.status == 200) 
+			{
+				// document.getElementById("contactEditResult").innerHTML = "Contact has been added";
+				console.log("Contact Edited")
+			}
+		};
+		xhr.send(jsonPayload);
+	}
+	catch(err)
+	{
+		// document.getElementById("contactEditResult").innerHTML = err.message;
+		console.log(err.message)
+	}
+
+	document.getElementById("entryFirstName" + i).innerText = newFirstName;
+	document.getElementById("entryLastName" + i).innerText = newLastName;
+	document.getElementById("entryPhone" + i).innerText = newPhone;
+	document.getElementById("entryEmail" + i).innerText = newEmail;
+
+	let fields = ["entryFirstName", "entryLastName", "entryEmail", "entryPhone"];
+	fields.forEach(function(field) {
+		document.getElementById(field + i).style.display = "block";
+		document.getElementById(field + "Edit" + i).style.display = "none";
+	});
+
+	document.getElementById("entryButtons" + i).style.display = "block";
+	document.getElementById("editButtons" + i).style.display = "none";
+}
+
+
+function tableFortmatToPhone(i) {
+	const field = document.getElementById("entryPhone" + "Edit" + i);
+	const digits = field.value.replace(/\D/g,'').substring(0,10);
+	// const digits = field.value.match(/\d$/g).substring(0,10);
+    const areaCode = digits.substring(0,3);
+    const prefix = digits.substring(3,6);
+    const suffix = digits.substring(6,10);
+
+    if(digits.length > 6) {field.value = `(${areaCode}) ${prefix}-${suffix}`;}
+    else if(digits.length > 3) {field.value = `(${areaCode}) ${prefix}`;}
+    else if(digits.length > 0) {field.value = `(${areaCode}`;}
+}
+
+
+
+
+window.addEventListener('load', () => {
+    const phoneInput = document.querySelectorAll('.phone_field');
+	phoneInput.forEach(function(element) {
+		element.addEventListener('keydown', disallowNonNumericInput);
+		element.addEventListener('keyup', formatToPhone);
+	})
+});
+
+const disallowNonNumericInput = (evt) => {
+    if (evt.ctrlKey) { return; }
+    if (evt.key.length > 1) { return; }
+    if (/[0-9.]/.test(evt.key)) { return; }
+    evt.preventDefault();
+}
+
+const formatToPhone = (evt) => {
+    const digits = evt.target.value.replace(/\D/g,'').substring(0,10);
+    const areaCode = digits.substring(0,3);
+    const prefix = digits.substring(3,6);
+    const suffix = digits.substring(6,10);
+
+    if(digits.length > 6) {evt.target.value = `(${areaCode}) ${prefix}-${suffix}`;}
+    else if(digits.length > 3) {evt.target.value = `(${areaCode}) ${prefix}`;}
+    else if(digits.length > 0) {evt.target.value = `(${areaCode}`;}
+
+	validPhone()
+};
+
+
+
+// const formatToPhone = (evt) => {
+//     const digits = evt.target.value.replace(/\D/g,'').substring(0,10);
+//     const areaCode = digits.substring(0,3);
+//     const prefix = digits.substring(3,6);
+//     const suffix = digits.substring(6,10);
+
+//     if(digits.length > 6) {evt.target.value = `(${areaCode}) ${prefix}-${suffix}`;}
+//     else if(digits.length > 3) {evt.target.value = `(${areaCode}) ${prefix}`;}
+//     else if(digits.length > 0) {evt.target.value = `(${areaCode}`;}
+
+//     validPhone(evt);
+// };
+
+
+function validPhone() {
+	const phoneField = document.getElementById("phone");
+	const phone = phoneField.value;
+	const regex = /^(\+0?1\s)?\(?\d{3}\)?[\s.-]\d{3}[\s.-]\d{4}$/;
+	var valid = regex.test(phone);
+
+	const wrongColor = getComputedStyle(root).getPropertyValue('--wrong-color');
+	const correctColor = getComputedStyle(root).getPropertyValue('--correct-color');
+
+	if (valid) {
+		console.log("PHONE VALID");
+		phoneField.style.borderColor = correctColor;
+	}else{
+		console.log("PHONE NOT VALID");
+		phoneField.style.borderColor = wrongColor;
+	}
+	return valid;
+}
+
+function validEmail() {
+	const emailField = document.getElementById("email");
+	const email = emailField.value;
+	const regex = /\S+@\S+\.\S+/;
+	var valid = regex.test(email);
+
+	const wrongColor = getComputedStyle(root).getPropertyValue('--wrong-color');
+	const correctColor = getComputedStyle(root).getPropertyValue('--correct-color');
+
+	if (valid) {
+		console.log("EMAIL VALID");
+		emailField.style.borderColor = correctColor;
+	}else{
+		console.log("EMAIL NOT VALID");
+		emailField.style.borderColor = wrongColor;
+	}
+	return valid;
+}
+
