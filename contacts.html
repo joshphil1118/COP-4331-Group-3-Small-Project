@@ -36,11 +36,22 @@
             </div>
 
             <div id="contactsDiv" class="tabContent" style="display: block">
-                <input type="text" id="searchText" placeholder="First Name Last Name" value="" onkeyup="searchContact()">
-                <button type="button" id="searchButton" class="buttons" onclick="searchContact();">Search</button>
+
+                <div id="seachDiv">
+                    <input type="text" id="searchText" class="contact_inputs" placeholder="First Name Last Name" value="" onkeyup="searchContact()">
+                    <button type="button" id="searchButton" class="buttons" onclick="searchContact();">Search</button>
+                </div>
 
                 <span id="contactSearchResult"></span>
-                <table id="contactsTable">
+                <table id="contactsTable" style="width: 100%;">
+                    <colgroup>
+                        <col span="1" style="width: 12%;">
+                        <col span="1" style="width: 20%;">
+                        <col span="1" style="width: 20%;">
+                        <col span="1" style="width: 18%;">
+                        <col span="1" style="width: 30%;">
+                    </colgroup>
+
                     <thead>
                         <tr>
                             <th>Actions</th>
@@ -60,9 +71,8 @@
                     <input type="text" class="register_field" id="firstName" placeholder="First Name" required> 
                     <input type="text" class="register_field" id="lastName" placeholder="Last Name" required>
                     <input type="tel" class="register_field phone_field" id="phone" placeholder="(XXX) XXX-XXXX" maxlength="16" required>
-                    <input type="text" class="register_field" id="email" onkeyup="validEmail()" placeholder="johndoe@example.com" required>
+                    <input type="text" class="register_field" id="email" onkeyup="validateEmail()" placeholder="johndoe@example.com" required>
                     <button type="submit" id="addContactButton" class="buttons">Add Contact</button>
-                    <span id="contactAddResult"></span>
                 </form>
             </div>
 
