@@ -411,6 +411,8 @@ function cancelEditContact(i) {
 }
 
 function acceptEditContact(i) {
+	document.getElementById("entryPhone" + "Edit" + i).style.borderColor = 'black';
+	document.getElementById("entryEmail" + "Edit" + i).style.borderColor = 'black';
 	let newFirstName = document.getElementById("entryFirstName" + "Edit" + i).value;
 	let newLastName = document.getElementById("entryLastName" + "Edit" + i).value;
 	let newPhone = document.getElementById("entryPhone" + "Edit" + i).value;
