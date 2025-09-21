@@ -206,27 +206,38 @@ function changeTab(event, tabName) {
 
 function addContact()
 {
+	let button = document.getElementById("addContactButton")
 	let newFirstName = document.getElementById("firstName").value;
 	let newLastName = document.getElementById("lastName").value;
-	let newPhoneNumber = document.getElementById("phone").value;
+	let newPhone = document.getElementById("phone").value;
 	let newEmail = document.getElementById("email").value;
-	document.getElementById("contactAddResult").innerHTML = "";
-
-	if(!validEmail()) {
-		document.getElementById("contactAddResult").innerHTML = "Email Fix";
+	
+	if(!validPhone(newPhone)) {
+		button.innerText = "Invalid Phone";
+		setTimeout(() => {
+						button.innerText = "Add Contact";
+					}, "2000");
 		return;
 	}
 
+	if(!validEmail(newEmail)) {
+		button.innerText = "Invalid Email";
+		setTimeout(() => {
+						button.innerText = "Add Contact";
+					}, "2000");
+		return;
+	}
+	
 	let tmp = {
 		firstName:newFirstName,
 		lastName:newLastName,
-		phone:newPhoneNumber,
+		phone:newPhone,
 		email:newEmail,
 		userId:userId
 	};
-
+	
 	let jsonPayload = JSON.stringify( tmp );
-
+	
 	let url = urlBase + '/AddContact.' + extension;
 	
 	let xhr = new XMLHttpRequest();
@@ -237,27 +248,33 @@ function addContact()
 		xhr.onreadystatechange = function() 
 		{
 			if (this.readyState == 4 && this.status == 200) 
-			{
-				document.getElementById("contactAddResult").innerHTML = "Contact has been added";
-			}
-		};
-		xhr.send(jsonPayload);
-	}
-	catch(err)
-	{
-		document.getElementById("contactAddResult").innerHTML = err.message;
-	}
-	
+				{
+					button.innerText = "Contact Added";
+
+					setTimeout(() => {
+						button.innerText = "Add Contact";
+					}, "2000");
+
+					["firstName", "lastName", "phone", "email"].forEach(function(element) {
+						document.getElementById(element).value = "";
+					});
+				}
+			};
+			xhr.send(jsonPayload);
+		}
+		catch(err)
+		{
+			button.innerText = err.message;
+		}
+		
 }
 
 function searchContact()
 {
 	let srch = document.getElementById("searchText").value;
-	// const name = content.value.toUpperCase().split(' ');
+	// const names = content.value.split(' ');
 	// firstName = name[0]
 	// lastName = name[name.length-1]
-
-	document.getElementById("contactSearchResult").innerHTML = "";
 	
 	let contactsList = ""
 
@@ -265,6 +282,7 @@ function searchContact()
 		search:srch,
 		userId:userId
 	};
+
 
 	let jsonPayload = JSON.stringify( tmp );
 
@@ -280,7 +298,6 @@ function searchContact()
 			document.getElementById("contactsFields").innerHTML = "";
 			if (this.readyState == 4 && this.status == 200) 
 			{
-				// document.getElementById("contactSearchResult").innerHTML = "Contact(s) has been retrieved";
 				let jsonObject = JSON.parse( xhr.responseText );
 				if (jsonObject.error) {
                     console.log(jsonObject.error);
@@ -291,26 +308,26 @@ function searchContact()
 					jsonResults = jsonObject.results[i];
 					contactsList += "<tr id=\"entry" + i + "\">";
 
-					contactsList +=	"<td id=\"entryButtons" + i + "\">"
-					contactsList += "<button id=\"entryDelete\"" + i + " type=\"button\" class=\"edit_buttons\" onclick=\"deleteContact(" + i + ");\"><i class=\"fa-solid fa-user-minus\"></i></button>";
+					contactsList +=	"<td id=\"entryButtons" + i + "\" class=\"contactSettings\">"
+					contactsList += "<button id=\"entryDelete\"" + i + " type=\"button\" class=\"edit_buttons left_button\" onclick=\"deleteContact(" + i + ");\"><i class=\"fa-solid fa-user-minus\"></i></button>";
 					contactsList += "<button type=\"button\" id=\"entryEdit\"" + i + " class=\"edit_buttons\" onclick=\"startEditContact(" + i + ");\"><i class=\"fa-solid fa-user-gear\"></i></button></td>";
 
-					contactsList += "<td id=\"editButtons" + i + "\" style=\"display: none\">"
-					contactsList += "<button type=\"button\" id=\"entryAccept\"" + i + " class=\"edit_buttons\" onclick=\"acceptEditContact(" + i + ");\"><i class=\"fa-solid fa-check\"></i></button>";
+					contactsList += "<td id=\"editButtons" + i + "\" class=\"contactSettings\" style=\"display: none\">"
+					contactsList += "<button type=\"button\" id=\"entryAccept\"" + i + " class=\"edit_buttons left_button\" onclick=\"acceptEditContact(" + i + ");\"><i class=\"fa-solid fa-check\"></i></button>";
 					contactsList += "<button type=\"button\" id=\"entryCancel\"" + i + " class=\"edit_buttons\" onclick=\"cancelEditContact(" + i + ");\"><i class=\"fa-solid fa-x\"></i></button></td>";
 
 
 					contactsList += "<td>" + "<span id=\"entryFirstName" + i + "\">" + jsonObject.results[i].FirstName + "</span>";
-					contactsList += "<input + id=\"entryFirstNameEdit" + i + "\" type=\"text\" style=\"display: none\" class=\"entry_edit_fields\" placeholder=\"First Name\">" + "</td>";
+					contactsList += "<input + id=\"entryFirstNameEdit" + i + "\" type=\"text\" style=\"display: none\" class=\"contact_inputs\" placeholder=\"First Name\">" + "</td>";
 
 					contactsList += "<td>" + "<span id=\"entryLastName" + i + "\">" + jsonObject.results[i].LastName + "</span>";
-					contactsList += "<input id=\"entryLastNameEdit" + i + "\" type=\"text\" style=\"display: none\" class=\"entry_edit_fields\" placeholder=\"Last Name\">" + "</td>";
+					contactsList += "<input id=\"entryLastNameEdit" + i + "\" type=\"text\" style=\"display: none\" class=\"contact_inputs\" placeholder=\"Last Name\">" + "</td>";
 
 					contactsList += "<td>" + "<span id=\"entryPhone" + i + "\">" + jsonObject.results[i].Phone + "</span>";
-					contactsList += "<input id=\"entryPhoneEdit" + i + "\" type=\"text\" style=\"display: none\" class=\"entry_edit_fields phone_field\" placeholder=\"Phone Name\" onkeydown=\"disallowNonNumericInput\" onkeyup=\"tableFortmatToPhone(" + i + ");\">" + "</td>";
+					contactsList += "<input id=\"entryPhoneEdit" + i + "\" type=\"text\" style=\"display: none\" class=\"phone_field contact_inputs\" placeholder=\"Phone Name\" onkeydown=\"disallowNonNumericInput\" onkeyup=\"tableFortmatToPhone(" + i + ");\">" + "</td>";
 
 					contactsList += "<td>" + "<span id=\"entryEmail" + i + "\">" + jsonObject.results[i].Email + "</span>";
-					contactsList += "<input id=\"entryEmailEdit" + i + "\" type=\"text\" style=\"display: none\" class=\"entry_edit_fields\" placeholder=\"Email Name\">" + "</td>";
+					contactsList += "<input id=\"entryEmailEdit" + i + "\" type=\"text\" style=\"display: none\" class=\"contact_inputs\" placeholder=\"Email Name\">" + "</td>";
 
 					contactsList += "</tr>"
 				}
@@ -322,15 +339,15 @@ function searchContact()
 	}
 	catch(err)
 	{
-		document.getElementById("contactSearchResult").innerHTML = err.message;
+		console.log(err.message);
 	}
 	
 }
 
 function deleteContact(i) {
-	let firstName = document.getElementById("entryFirstName" + i).innerText
+    let firstName = document.getElementById("entryFirstName" + i).innerText
 	let lastName = document.getElementById("entryLastName" + i).innerText
-
+    
 	let tmp = {
 		firstName:firstName,
 		lastName:lastName,
@@ -402,6 +419,25 @@ function acceptEditContact(i) {
 	let originalFirstName = document.getElementById("entryFirstName" + i).innerText;
 	let originalLastName = document.getElementById("entryLastName" + i).innerText;
 
+	const wrongColor = getComputedStyle(root).getPropertyValue('--wrong-color');
+
+	let phoneValid = validPhone(newPhone);
+	let emailValid = validEmail(newEmail);
+
+	if(!phoneValid) {
+		console.log("Invalid Phone");
+		document.getElementById("entryPhone" + "Edit" + i).style.borderColor = wrongColor;
+	}
+
+	if(!emailValid) {
+		console.log("Invalid Email");
+		document.getElementById("entryEmail" + "Edit" + i).style.borderColor = wrongColor;
+	}
+
+	if(!phoneValid || !emailValid) {
+		return;
+	}
+
 	let tmp = {
 		firstName:originalFirstName,
 		lastName:originalLastName,
@@ -425,7 +461,6 @@ function acceptEditContact(i) {
 		{
 			if (this.readyState == 4 && this.status == 200) 
 			{
-				// document.getElementById("contactEditResult").innerHTML = "Contact has been added";
 				console.log("Contact Edited")
 			}
 		};
@@ -433,7 +468,6 @@ function acceptEditContact(i) {
 	}
 	catch(err)
 	{
-		// document.getElementById("contactEditResult").innerHTML = err.message;
 		console.log(err.message)
 	}
 
@@ -494,60 +528,62 @@ const formatToPhone = (evt) => {
     else if(digits.length > 3) {evt.target.value = `(${areaCode}) ${prefix}`;}
     else if(digits.length > 0) {evt.target.value = `(${areaCode}`;}
 
-	validPhone()
+	validatePhone()
 };
 
-
-
-// const formatToPhone = (evt) => {
-//     const digits = evt.target.value.replace(/\D/g,'').substring(0,10);
-//     const areaCode = digits.substring(0,3);
-//     const prefix = digits.substring(3,6);
-//     const suffix = digits.substring(6,10);
-
-//     if(digits.length > 6) {evt.target.value = `(${areaCode}) ${prefix}-${suffix}`;}
-//     else if(digits.length > 3) {evt.target.value = `(${areaCode}) ${prefix}`;}
-//     else if(digits.length > 0) {evt.target.value = `(${areaCode}`;}
-
-//     validPhone(evt);
-// };
-
-
-function validPhone() {
+function validatePhone() {
 	const phoneField = document.getElementById("phone");
 	const phone = phoneField.value;
-	const regex = /^(\+0?1\s)?\(?\d{3}\)?[\s.-]\d{3}[\s.-]\d{4}$/;
-	var valid = regex.test(phone);
-
+	// const regex = /^(\+0?1\s)?\(?\d{3}\)?[\s.-]\d{3}[\s.-]\d{4}$/;
+	// var valid = regex.test(phone);
+	
 	const wrongColor = getComputedStyle(root).getPropertyValue('--wrong-color');
 	const correctColor = getComputedStyle(root).getPropertyValue('--correct-color');
-
-	if (valid) {
+	
+	if (validPhone(phone)) {
 		console.log("PHONE VALID");
 		phoneField.style.borderColor = correctColor;
 	}else{
 		console.log("PHONE NOT VALID");
 		phoneField.style.borderColor = wrongColor;
 	}
-	return valid;
 }
 
-function validEmail() {
+
+function validateEmail() {
 	const emailField = document.getElementById("email");
 	const email = emailField.value;
-	const regex = /\S+@\S+\.\S+/;
-	var valid = regex.test(email);
-
+	// const regex = /\S+@\S+\.\S+/;
+	// var valid = regex.test(email);
+	
 	const wrongColor = getComputedStyle(root).getPropertyValue('--wrong-color');
 	const correctColor = getComputedStyle(root).getPropertyValue('--correct-color');
-
-	if (valid) {
+	
+	if (validEmail(email)) {
 		console.log("EMAIL VALID");
 		emailField.style.borderColor = correctColor;
 	}else{
 		console.log("EMAIL NOT VALID");
 		emailField.style.borderColor = wrongColor;
 	}
+}
+
+function validPhone(phone) {
+	const regex = /^(\+0?1\s)?\(?\d{3}\)?[\s.-]\d{3}[\s.-]\d{4}$/;
+	var valid = regex.test(phone);
 	return valid;
 }
 
+
+function validEmail(email) {
+	const regex = /\S+@\S+\.\S+/;
+	var valid = regex.test(email);
+	return valid;
+}
+
+const merge = (a, b, predicate = (a, b) => a === b) => {
+    const c = [...a]; // copy to avoid side effects
+    // add all items from B to copy C if they're not already present
+    b.forEach((bItem) => (c.some((cItem) => predicate(bItem, cItem)) ? null : c.push(bItem)))
+    return c;
+}
