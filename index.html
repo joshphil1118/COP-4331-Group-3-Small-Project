@@ -8,36 +8,46 @@
     </head>
 
     <body>
-        <h1 class="intro"> Don't miss out on connections because of 
-            <span class="switch1" id="work" >work <span class="hid">..</span></span>
-            <span class="switch2" id="vacation">vacation <span class="hid">..</span></span>
+        <!-- Intro header-->
+        <h1 class="intro"> 
+            <span class="hid">....</span></span><!-- Spacing not visible-->
+            <span class="hid">....</span></span><!-- Spacing-->
+            Don't miss out on connections because of 
+            <span class="switch1" id="work" >work <span class="hid">....</span></span><!-- Spacing-->
+            <span class="switch2" id="vacation">vacation <span class="hid">....</span></span><!-- Spacing-->
         </h1>
 
+        <!-- Main buttons-->
         <div class="button_Position">
             <button class="button1" onclick="openForm(); closeForm2()"> Login </button>
             <button class="button1" onclick="openForm2(); closeForm()"> Register </button>
-            
         </div>
         
+        <!-- Github redirect img-->
         <a class="git_Redirect" href="https://github.com/joshphil1118/COP-4331-Group-3-Small-Project"><img src="images/Github.png"></a>
 
+        <!-- Login form, invisible at load-->
         <div class="form-popup" id="login">
             <form action="LAMPAPI/Login.php" class="form-container" onsubmit="return doLogin(event);">
             <h1 class="titleForm">Login</h1>
 
+            <!-- Displays error iff -->
             <span id="loginResult"></span>
 
+            <!-- Label followed by input field box-->
             <label for="Username"><b>Username</b></label>
             <input type="text" placeholder="Enter Username" id="loginName" required>
 
             <label for="psw"><b>Password</b></label>
             <input type="password" placeholder="Enter Password" id="loginPassword" required>
 
+            <!-- in form button-->
             <button type="submit" class="btn">Login</button>
             <button type="button" class="btn cancel" onclick="closeForm()">Close</button>
             </form>
         </div>
 
+        <!-- Register form, invisible at load; follows same pattern as Login-->
         <div class="form-popup" id="register">
             <form action="LAMPAPI/Register.php" class="form-container" onsubmit="return doRegister(event);">
             <h1 class="titleForm">Register</h1>
@@ -62,6 +72,5 @@
         </div>
 
     </body>
-
 
 </html>

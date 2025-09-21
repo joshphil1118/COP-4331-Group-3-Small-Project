@@ -2,20 +2,21 @@
 h1 {
   color: black;
   border: gray;
-
 }
 
+/*title apperance*/
 .intro {
-
-  border-radius: 10px;
-  border-bottom: 2px solid white;
+  border-radius: 15px;
+  color: white;
+  background-color: black;
+  border-bottom: 5px solid orchid;
   max-width: fit-content;
   margin: auto;
-
+  font-size: 250%;
 }
 
+/*works as animation for title text switch*/
 .switch1 {
-
   display: none;
 }
 
@@ -23,9 +24,9 @@ h1 {
   display: inline;
 }
 
+/*title spacing */
 .hid {
-
-  font-size: 1px;
+  font-size: 0.1px;
 }
    
 /* sets form title color*/
@@ -36,24 +37,21 @@ h1 {
 
 /* set background imgs */
 body {
-
   text-align: left;
   font-family: 'Garamond', serif; 
 
-  background-image: url("../images/LoginBG.png"), url("../images/Vaca.png"), url("../images/Work.jpeg"),
-  linear-gradient(to right, rgb(30 75 115 / 100%), rgb(58, 167, 112));
+  background-image: url("../images/LoginBG.png"), url("../images/Vaca.png"), url("../images/Work.jpeg");
   background-repeat: no-repeat; /* Prevents the image from repeating */
-  background-size: 23%, 50%, 51%, 100%;  /*Resizes the image to cover the entire container */
-  background-position: right center, right center, left center, right; /* centers background */
+  background-size: 23%, 50% 100%, 51% 100%;  /* Resizes the image to cover the entire container */
+  background-position: right center, right center, left center; /* centers background */
   background-attachment: fixed; /* Keeps the background fixed when scrolling */
-
 }
 
-/* base login/register button hue*/
+/* base login/register button*/
 button {
-  background-color: black;
-  color: white;
-  font-size: 25px;
+  background-color: white;
+  color: black;
+  font-size: 200%;/*25px*/
   border-radius: 35%; /*rounds the edges of border*/
   border: 5px solid black;
   margin-right: 20px;
@@ -61,7 +59,7 @@ button {
 
 /* set the login/register buttons to the center*/
 .button_Position {
-  margin-left: 580px;
+  margin-left: 42%;
   padding: 5px;
 }
 
@@ -75,19 +73,19 @@ button {
 /*base lavel color as black*/
 label {
   color: black;
+  font-size: 125%;
 }
 
 /* The popup form - hidden by default */
 .form-popup {
   display: none;
   position: relative;
-  top: -70px;
-  left: 525px;
+  top: -65px;
+  left: 40%;
   max-width: 300px;
   overflow: auto;
   border: 3px solid #f1f1f1;
   border-radius: 50px;
-
 }
 
 /* Add styles to the form container by adding padding */
@@ -151,18 +149,18 @@ label {
 
 /* adds in a line for login error*/
 #registerResult{
-    display: inline-block;
-    font-size: 1.3em;
-    width: 90%;
-    text-align: center;
-    margin-left: 5%;
-    margin-bottom: 2%;
-   font-family: 'Garamond', serif; 
-    color: #95060a;
+  display: inline-block;
+  font-size: 1.3em;
+  width: 90%;
+  text-align: center;
+  margin-left: 5%;
+  margin-bottom: 2%;
+  font-family: 'Garamond', serif; 
+  color: #95060a;
 }
 
 /* add a color change when hovering over github button*/
 .git_Redirect {
   cursor: pointer;
-  margin-left: 1165px;
+  margin-left: 86.5%;
 }
