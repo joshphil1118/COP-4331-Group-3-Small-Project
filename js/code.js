@@ -418,13 +418,23 @@ function acceptEditContact(i) {
 	let originalFirstName = document.getElementById("entryFirstName" + i).innerText;
 	let originalLastName = document.getElementById("entryLastName" + i).innerText;
 
-	if(!validPhone(newPhone)) {
+	const wrongColor = getComputedStyle(root).getPropertyValue('--wrong-color');
+	const correctColor = getComputedStyle(root).getPropertyValue('--correct-color');
+
+	let phoneValid = validPhone(newPhone);
+	let emailValid = validEmail(newEmail);
+
+	if(!phoneValid) {
 		console.log("Invalid Phone");
-		return;
+		document.getElementById("entryPhone" + "Edit" + i).style.borderColor = wrongColor;
 	}
 
-	if(!validEmail(newEmail)) {
+	if(!emailValid) {
 		console.log("Invalid Email");
+		document.getElementById("entryEmail" + "Edit" + i).style.borderColor = wrongColor;
+	}
+
+	if(!phoneValid || !emailValid) {
 		return;
 	}
 
