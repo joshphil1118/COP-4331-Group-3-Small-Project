@@ -272,7 +272,7 @@ function addContact()
 function searchContact()
 {
 	let srch = document.getElementById("searchText").value;
-	// const name = content.value.toUpperCase().split(' ');
+	// const names = content.value.split(' ');
 	// firstName = name[0]
 	// lastName = name[name.length-1]
 	
@@ -282,6 +282,7 @@ function searchContact()
 		search:srch,
 		userId:userId
 	};
+
 
 	let jsonPayload = JSON.stringify( tmp );
 
@@ -344,9 +345,9 @@ function searchContact()
 }
 
 function deleteContact(i) {
-	let firstName = document.getElementById("entryFirstName" + i).innerText
+    let firstName = document.getElementById("entryFirstName" + i).innerText
 	let lastName = document.getElementById("entryLastName" + i).innerText
-
+    
 	let tmp = {
 		firstName:firstName,
 		lastName:lastName,
@@ -419,7 +420,6 @@ function acceptEditContact(i) {
 	let originalLastName = document.getElementById("entryLastName" + i).innerText;
 
 	const wrongColor = getComputedStyle(root).getPropertyValue('--wrong-color');
-	const correctColor = getComputedStyle(root).getPropertyValue('--correct-color');
 
 	let phoneValid = validPhone(newPhone);
 	let emailValid = validEmail(newEmail);
@@ -461,7 +461,6 @@ function acceptEditContact(i) {
 		{
 			if (this.readyState == 4 && this.status == 200) 
 			{
-				// document.getElementById("contactEditResult").innerHTML = "Contact has been added";
 				console.log("Contact Edited")
 			}
 		};
@@ -469,7 +468,6 @@ function acceptEditContact(i) {
 	}
 	catch(err)
 	{
-		// document.getElementById("contactEditResult").innerHTML = err.message;
 		console.log(err.message)
 	}
 
@@ -581,4 +579,11 @@ function validEmail(email) {
 	const regex = /\S+@\S+\.\S+/;
 	var valid = regex.test(email);
 	return valid;
+}
+
+const merge = (a, b, predicate = (a, b) => a === b) => {
+    const c = [...a]; // copy to avoid side effects
+    // add all items from B to copy C if they're not already present
+    b.forEach((bItem) => (c.some((cItem) => predicate(bItem, cItem)) ? null : c.push(bItem)))
+    return c;
 }
