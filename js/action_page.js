@@ -1,5 +1,5 @@
 
-setInterval( myTimer, 5000);
+setInterval( myTimer, 4000);
 let count = 0;
 
 function myTimer() {
