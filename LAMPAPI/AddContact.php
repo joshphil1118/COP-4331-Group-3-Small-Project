@@ -18,12 +18,20 @@
 	else
 	{
 		$stmt = $conn->prepare("INSERT into Contacts (FirstName,LastName, Phone, Email, UserId) VALUES(?,?,?,?, ?)");
-		$stmt->bind_param("ssssi", $firstName, $lastName, $phone, $email, $userId);
-
-		$stmt->execute();		
+		$stmt->bind_param("ssssi", $firstName, $lastName, $phone, $email, $userId);		
+		
+		if ($stmt->execute())
+		{
+			// Success response
+			returnWithInfo("Contact added successfully.");
+		}
+		else
+		{
+			// Error response
+			returnWithError("Unable to add contact.");
+		}
 		$stmt->close();
 		$conn->close();
-		returnWithError("");
 	}
 	
 	
@@ -42,5 +50,10 @@
 	{
 		$retValue = '{"error":"' . $err . '"}';
 		sendResultInfoAsJson( $retValue );
-	}	
+	}
+	function returnWithInfo($msg)
+   	{
+        	$retValue = '{"success":"' . $msg . '"}';
+       		sendResultInfoAsJson($retValue);
+    	}
 ?>
